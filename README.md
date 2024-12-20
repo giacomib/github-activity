@@ -1,18 +1,17 @@
-## Getting Started
+# github-activity
+A simple command line interface (CLI) to fetch the recent activity of a GitHub user and display it in the terminal.
 
-Welcome to the VS Code Java world. Here is a guideline to help you get started to write Java code in Visual Studio Code.
+## Project URL
+[https://roadmap.sh/projects/task-tracker](https://roadmap.sh/projects/github-user-activity)
 
-## Folder Structure
+# Documentation
 
-The workspace contains two folders by default, where:
+## How to run the app
+- todo
+### Commands
+- todo
+## Other notes
+- todo
+## Tests made
+#### Other tests done
 
-- `src`: the folder to maintain sources
-- `lib`: the folder to maintain dependencies
-
-Meanwhile, the compiled output files will be generated in the `bin` folder by default.
-
-> If you want to customize the folder structure, open `.vscode/settings.json` and update the related settings there.
-
-## Dependency Management
-
-The `JAVA PROJECTS` view allows you to manage your dependencies. More details can be found [here](https://github.com/microsoft/vscode-java-dependency#manage-dependencies).
