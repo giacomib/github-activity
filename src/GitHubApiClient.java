@@ -10,6 +10,7 @@ public class GitHubApiClient {
     private HttpClient httpClient;
     private String endpoint;
     private ArrayList<Event> events;
+    private String jsonRequestUserInfo;
 
     GitHubApiClient(String username) {
         this.httpClient = HttpClient.newBuilder()
@@ -17,6 +18,7 @@ public class GitHubApiClient {
                                     .connectTimeout(Duration.ofSeconds(10))
                                     .build();
         this.endpoint = "https://api.github.com/users/" + username + "/events";
+        this.jsonRequestUserInfo = requestUserInfo();
     }
 
     public String requestUserInfo() {
@@ -41,10 +43,29 @@ public class GitHubApiClient {
     }
 
     public void fromJsonToList() {
-        String info = requestUserInfo();
+        String jsonInfoCopy = this.jsonRequestUserInfo;
+        
+        // to use as a stack (lifo) to count how many parentesis are passed
+        int counter = 0;
 
+        int firstOpenOccurrence = jsonInfoCopy.indexOf('{');
+        System.out.println(jsonInfoCopy.substring(firstOpenOccurrence));
+
+
+/* 
+		while (jsonInfoCopy.indexOf(']') != -1) {
+			int parentesisCount = 0;
+			do {
+				if()
+			}
+			while(blockFinished = false);
+		
+		}
+ */
+
+        /* 
         while(info.indexOf("id") != -1) {
-            System.out.println();
+			System.out.println();
             String id = info.substring(info.indexOf("id") + 5, info.indexOf('"', info.indexOf("id") + 5));
             info = info.substring(info.indexOf('"', info.indexOf("id") + 5), info.length());
             System.out.println("id: " + id);
@@ -65,6 +86,7 @@ public class GitHubApiClient {
             info = info.substring(info.indexOf('}', info.indexOf(']')), info.length());
             System.out.println("payload: " + payload);
         }
+		 */
     }
 
     public void getUserInfo(){
