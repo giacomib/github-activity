@@ -2,13 +2,11 @@ public class Event {
     private String id;
     private String type;
     private String repoName;
-    private int numberOfcommits;
 
-    public Event(String id, String type, String reponame, int numberOfCommits) {
+    public Event(String id, String type, String reponame) {
         this.id = id;
         this.type = type;
         this.repoName = reponame;
-        this.numberOfcommits = numberOfCommits;
     }
 
     public String getId() {
@@ -30,7 +28,7 @@ public class Event {
         return repoName;
     }
 
-    public int getNumberOfCommits() {
-        return this.numberOfcommits;
+    public String toString() {
+        return "Made an event of type " + this.type + " with id " + this.id + " in the repository " + this.repoName;
     }
 }

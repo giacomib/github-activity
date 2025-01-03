@@ -19,6 +19,8 @@ public class GitHubApiClient {
                                     .build();
         this.endpoint = "https://api.github.com/users/" + username + "/events";
         this.jsonRequestUserInfo = requestUserInfo();
+        this.events = new ArrayList<Event>();
+        fromJsonToList();
     }
 
     public String requestUserInfo() {
@@ -43,55 +45,43 @@ public class GitHubApiClient {
     }
 
     public void fromJsonToList() {
-        String jsonInfoCopy = this.jsonRequestUserInfo;
-        
-        // to use as a stack (lifo) to count how many parentesis are passed
-        int counter = 0;
+        String jsonInfo = this.jsonRequestUserInfo;
+        String workingJsonInfo = jsonInfo;
 
-        int firstOpenOccurrence = jsonInfoCopy.indexOf('{');
-        System.out.println(jsonInfoCopy.substring(firstOpenOccurrence));
+        while(workingJsonInfo.indexOf('{') != -1) {
+            int currentPos = workingJsonInfo.indexOf('{');
+            int startingPos = currentPos;
+            // to use as a stack (lifo) to count how many brackets are passed
+            int bracketCounter = 1;
 
-
-/* 
-		while (jsonInfoCopy.indexOf(']') != -1) {
-			int parentesisCount = 0;
-			do {
-				if()
-			}
-			while(blockFinished = false);
-		
-		}
- */
-
-        /* 
-        while(info.indexOf("id") != -1) {
-			System.out.println();
-            String id = info.substring(info.indexOf("id") + 5, info.indexOf('"', info.indexOf("id") + 5));
-            info = info.substring(info.indexOf('"', info.indexOf("id") + 5), info.length());
-            System.out.println("id: " + id);
-
-            String type = info.substring(info.indexOf("type") + 7, info.indexOf('"', info.indexOf("type") + 7));
-            info = info.substring(info.indexOf('"', info.indexOf("type") + 7), info.length());
-            System.out.println("type: " + type);
-
-            String actor = info.substring(info.indexOf("actor") + 7, info.indexOf('}', info.indexOf("actor") + 7));
-            info = info.substring(info.indexOf('}', info.indexOf("actor") + 7), info.length());
-            System.out.println("actor: " + actor);
-
-            String repo = info.substring(info.indexOf("repo") + 6, info.indexOf('}', info.indexOf("repo") + 6));
-            info = info.substring(info.indexOf('}', info.indexOf("repo") + 6), info.length());
-            System.out.println("repo: " + repo);
-
-            String payload = info.substring(info.indexOf("payload") + 9, info.indexOf('}', info.indexOf(']')));
-            info = info.substring(info.indexOf('}', info.indexOf(']')), info.length());
-            System.out.println("payload: " + payload);
+            while(bracketCounter != 0) {
+                if(workingJsonInfo.indexOf('{', currentPos + 1) != -1 && workingJsonInfo.indexOf('}', currentPos + 1) != -1) {
+                    if(workingJsonInfo.indexOf('{', currentPos + 1) < workingJsonInfo.indexOf('}', currentPos + 1)) {
+                        bracketCounter++;
+                        currentPos = workingJsonInfo.indexOf('{', currentPos + 1);
+                    }
+                    else {
+                        bracketCounter--;
+                        currentPos = workingJsonInfo.indexOf('}', currentPos + 1);
+                    }
+                }
+                else{
+                    bracketCounter--;
+                    currentPos = workingJsonInfo.indexOf('}', currentPos + 1);
+                }
+            }
+            String eventTmp = workingJsonInfo.substring(startingPos, currentPos + 1);
+            String id = eventTmp.substring(eventTmp.indexOf("id") + 5, eventTmp.indexOf('"', eventTmp.indexOf("id") + 6));
+            String type = eventTmp.substring(eventTmp.indexOf("type") + 7, eventTmp.indexOf('"', eventTmp.indexOf("type") + 8));
+            String repoName = eventTmp.substring(eventTmp.indexOf("name") + 7, eventTmp.indexOf('"', eventTmp.indexOf("name") + 8));
+            Event currentEvent = new Event(id, type, repoName);
+            this.events.add(currentEvent);
+            workingJsonInfo = workingJsonInfo.substring(currentPos + 1);
         }
-		 */
     }
 
-    public void getUserInfo(){
-        fromJsonToList();
-        return;
+    public ArrayList<Event> getEvents(){
+        return this.events;
     }
 
 }
